@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />\  <title>RAWAL BHAI – Tournament Registration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg,#020617,#0f172a);
+      color:#fff;
+    }
+    .form-box {
+      max-width:540px;
+      margin:40px auto;
+      background:#020617;
+      padding:28px;
+      border-radius:18px;
+      box-shadow:0 0 30px rgba(0,0,0,0.75)
+    }
+    h2 {text-align:center; margin-bottom:6px}
+    p {text-align:center; font-size:14px; color:#cbd5f5}
+    label {display:block; margin-top:14px; font-size:14px}
+    input, select {width:100%; padding:12px; margin-top:6px; border-radius:10px; border:none}
+    button {margin-top:22px; width:100%; padding:14px; background:#dc2626; border:none; color:white; font-size:17px; border-radius:14px; cursor:pointer}
+    button:hover {background:#b91c1c}
+    .rules {margin-top:14px; font-size:13px}
+    .rules input {width:auto; margin-right:6px}
+    .success {display:none; text-align:center; margin-top:20px; color:#22c55e; font-size:16px}
+    .full {display:none; text-align:center; margin-top:20px; color:#f87171; font-size:16px}
+  </style>
+</head>
+<body>
+
+<div class="form-box">
+  <h2>🔥 RAWAL BHAI TOURNAMENT 🔥</h2>
+  <p>Entry Fee: ₹20 | Free Fire Custom Room<br>Only <b>48 Slots</b> Available</p>
+
+  <form id="tournamentForm">
+    <label>Player Name</label>
+    <input type="text" required>
+
+    <label>Free Fire UID</label>
+    <input type="text" required>
+
+    <label>In‑Game Name (IGN)</label>
+    <input type="text" required>
+
+    <label>WhatsApp Number</label>
+    <input type="tel" required>
+
+    <label>Payment Method</label>
+    <select required>
+      <option value="">Select Payment</option>
+      <option>Google Pay</option>
+      <option>PhonePe</option>
+      <option>Paytm</option>
+    </select>
+
+    <label>Transaction ID</label>
+    <input type="text" required>
+
+    <div class="rules">
+      <input type="checkbox" required> I agree to tournament rules & no‑refund policy.
+    </div>
+
+    <button type="submit">Submit & Join</button>
+  </form>
+
+  <div class="success" id="successMsg">
+    ✅ Registration Successful!<br>
+    Room ID & Password will be sent on WhatsApp.
+  </div>
+
+  <div class="full" id="fullMsg">
+    ❌ Slots Full!<br>
+    Next tournament coming soon.
+  </div>
+</div>
+
+<script>
+  let MAX_SLOTS = 48;
+  let currentEntries = 0; // connect this with Google Sheet count
+
+  const form = document.getElementById('tournamentForm');
+  const success = document.getElementById('successMsg');
+  const full = document.getElementById('fullMsg');
+
+  if(currentEntries >= MAX_SLOTS){
+    form.style.display = 'none';
+    full.style.display = 'block';
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+
+    // TODO: Connect Google Apps Script here
+    // ADMIN WHATSAPP NOTIFICATION
+    // Uses WhatsApp API service (CallMeBot example)
+    const adminNumber = '91XXXXXXXXXX'; // replace with admin number
+    const msg = encodeURIComponent(
+      'New Tournament Entry%0A'
+      + 'Name: ' + form.elements[0].value + '%0A'
+      + 'FF UID: ' + form.elements[1].value + '%0A'
+      + 'IGN: ' + form.elements[2].value + '%0A'
+      + 'Mobile: ' + form.elements[3].value + '%0A'
+      + 'Payment: ' + form.elements[4].value + '%0A'
+      + 'TXN ID: ' + form.elements[5].value
+    );
+
+    fetch(`https://api.callmebot.com/whatsapp.php?phone=${adminNumber}&text=${msg}&apikey=YOUR_API_KEY`);
+
+    form.style.display = 'none';
+    success.style.display = 'block';
+  });
+</script>
+
+</body>
+</html>
